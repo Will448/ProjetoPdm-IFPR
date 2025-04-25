@@ -1,4 +1,8 @@
 package br.edu.ifpr.bsi.projetopdm.dao;
 
-public class CargoDAO extends GenericDAO {
+import br.edu.ifpr.bsi.projetopdm.model.Cargo;
+
+public class CargoDAO extends GenericDAO<Cargo>{
+
+
 }
