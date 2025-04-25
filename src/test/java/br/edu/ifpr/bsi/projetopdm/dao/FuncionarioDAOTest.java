@@ -16,6 +16,6 @@ public class FuncionarioDAOTest {
         funcionario.setNumero_telefone("48988741236");
 
         FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-        funcionarioDAO.inserir(funcionario);
+        funcionarioDAO.inserir(funcionario);;
     }
 }
