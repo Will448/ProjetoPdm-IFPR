@@ -4,21 +4,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_funcinario")
+@Table(name = "tb_funcionario")
 public class Funcionario extends  GenericModel{
 
     /*definir cinco  atributos para o funcionario*/
 
-    @Column(nullable = false, name = "nome_funcionario")
+    @Column( name = "nome_funcionario")//nulltable não permite que o valor seja nulo
     private String nome;
 
-    @Column(nullable = false, name = "cpf_funcionario")
+    @Column( name = "cpf_funcionario")
     private String cpf_func;
 
-    @Column(nullable = false, name = "dta_funcionario")
+    @Column( name = "dta_funcionario")
     private String dta_nascimento;
 
-    @Column(nullable = false, name = "num_funcionario")
+    @Column(name = "num_funcionario")
     private String numero_telefone;
 
 
