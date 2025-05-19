@@ -21,19 +21,17 @@
 
         <!-- Mapeamento das Entidades -->
         <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.Funcionario" />
+                class="br.edu.ifpr.bsi.projetopdm.model.AvaliacaoMonitoria" />
         <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.Cargo" />
+                class="br.edu.ifpr.bsi.projetopdm.model.Certificado" />
         <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.OcorrenciaFuncionario"/>
+                class="br.edu.ifpr.bsi.projetopdm.model.Evento"/>
         <mapping
                 class="br.edu.ifpr.bsi.projetopdm.model.UsuarioSistema"/>
         <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.ContratoTrabalho"/>
+                class="br.edu.ifpr.bsi.projetopdm.model.Monitoria"/>
         <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.Departamento"/>
-        <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.Pagamento"/>
+                class="br.edu.ifpr.bsi.projetopdm.model.Frequencia"/>
 
     </session-factory>
 </hibernate-configuration>
