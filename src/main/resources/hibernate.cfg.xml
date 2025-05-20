@@ -21,7 +21,7 @@
 
         <!-- Mapeamento das Entidades -->
         <mapping
-                class="br.edu.ifpr.bsi.projetopdm.model.AvaliacaoMonitoria" />
+                class="br.edu.ifpr.bsi.projetopdm.model.Avaliacao" />
         <mapping
                 class="br.edu.ifpr.bsi.projetopdm.model.Certificado" />
         <mapping

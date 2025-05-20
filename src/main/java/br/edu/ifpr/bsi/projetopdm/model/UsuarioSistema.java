@@ -107,4 +107,5 @@ public class UsuarioSistema extends GenericModel {
     public void setNivelAcesso(String nivelAcesso) {
         this.nivelAcesso = nivelAcesso;
     }
+
 }
