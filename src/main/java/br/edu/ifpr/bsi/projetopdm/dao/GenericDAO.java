@@ -19,7 +19,7 @@ public class GenericDAO <Entidade>{
         this.classe = (Class<Entidade>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    public static void inserir(Funcionario entidade){
+    public void inserir(Funcionario entidade){
 
         Transaction transacao = null; //funciona como verificador e transporte das informações
         Session session = HibernateHelper.getFabricaDeSessoes().openSession();
@@ -30,6 +30,7 @@ public class GenericDAO <Entidade>{
             transacao.commit();
 
         }catch (RuntimeException e) {
+            e.printStackTrace();
             if (transacao != null){
                 transacao.rollback();
             }
@@ -39,15 +40,6 @@ public class GenericDAO <Entidade>{
         }
 
     }
-    public Entidade buscarPorId(Long id) {
-        Session session = HibernateHelper.getFabricaDeSessoes().openSession();
-        try {
-            return session.find(classe, id);
-        } finally {
-            session.close();
-        }
-    }
-
     public void remover(Entidade entidade){
         Transaction transacao = null; //funciona como verificador e transporte das informações
         Session session = HibernateHelper.getFabricaDeSessoes().openSession();
@@ -69,6 +61,26 @@ public class GenericDAO <Entidade>{
 
     }
 
+public void alterarSalvar(Entidade entidade){
+
+    Transaction transacao = null; //funciona como verificador e transporte das informações
+    Session session = HibernateHelper.getFabricaDeSessoes().openSession();
+
+    try {
+        transacao = session.beginTransaction();
+        session.merge(entidade);//neste formato utilizo o merge para o alterar ou inserir
+        transacao.commit();
+
+    }catch (RuntimeException e) {
+        if (transacao != null){
+            transacao.rollback();
+        }
+        System.out.println("Ocorreu um erro na execução da transação");
+    } finally {
+        session.close();
+    }
+
+}
     public List<Entidade> listar(){
 
         List<Entidade> resultado = null;
@@ -92,6 +104,33 @@ public class GenericDAO <Entidade>{
         }
 
         return resultado;
-    }
+}
+
+
+        public Entidade buscarPorId(Long _ID){
+
+            Entidade resultado = null;
+
+            Session session = HibernateHelper.getFabricaDeSessoes().openSession();
+
+            try{
+                CriteriaBuilder builder = session.getCriteriaBuilder();
+                CriteriaQuery<Entidade> criteria = builder.createQuery(classe);
+
+                Root<Entidade> root = criteria.from(classe);
+                criteria.select(root).where(builder.equal(root.get("id"),_ID)); //criteria é usado para passar parametros de busca
+                resultado = session.createQuery(criteria).getSingleResult();//vai trazer somente um usuario
+
+            }catch(RuntimeException erro){
+                //Não precisa fazer rollback
+                //porque não existe transação em uma consulta
+                System.out.println("Ocorreu um erro ao buscar a entidade.");
+            }finally{
+                session.close();
+            }
+
+            return resultado;
+        }
 
 }
+

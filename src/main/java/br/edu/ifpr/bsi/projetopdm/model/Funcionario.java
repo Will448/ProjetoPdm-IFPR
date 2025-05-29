@@ -1,7 +1,5 @@
 package br.edu.ifpr.bsi.projetopdm.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_funcionario")
@@ -21,7 +19,16 @@ public class Funcionario extends  GenericModel{
     @Column(name = "num_funcionario")
     private String numero_telefone;
 
+    @Column( name = "sexo_funcionario")
+    private String sexo_funcionario;
 
+    @JoinColumn //é uma coluna de junçao
+    @ManyToOne //N,M um para  muitos para verificar e real
+    private Cargo cargo;
+
+    @JoinColumn
+    @OneToOne(cascade = CascadeType.ALL)//é usado para alterar os dados de pagamento dentro do funcionario
+    public Pagamento pagamento;
 
     public String getNome() {
         return nome;
@@ -63,8 +70,20 @@ public class Funcionario extends  GenericModel{
         this.sexo_funcionario = sexo_funcionario;
     }
 
-    @Column(nullable = false, name = "sexo_funcionario")
-    private String sexo_funcionario;
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
+    }
 
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
 }
 

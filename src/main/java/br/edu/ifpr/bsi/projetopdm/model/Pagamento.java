@@ -52,4 +52,5 @@ public class Pagamento extends GenericModel {
         this.nomeCargo = nomeCargo;
     }
 
+
 }

@@ -1,16 +1,20 @@
 package br.edu.ifpr.bsi.projetopdm.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tb_cargo")
-public class Cargo extends  GenericModel{
+public class Cargo extends GenericModel{
 
     /*definir cinco  atributos para o funcionario*/
 
     @Column(nullable = false, name = "nome_cargo")
     private String nome_cargo;
+
+    @JoinColumn
+    @OneToMany
+    private List<Funcionario> funcionarios;
 
     @Column(nullable = false, name = "descricao_cargo")
     private String descricao_cargo;
