@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Usuários Cadastrados</title>
+</h:head>
+<h:body>
+    <p:growl id="mensagens"></p:growl>
+
+    <h:form id="formMenu">
+        <p:megaMenu orientation="horizontal">
+            <p:menuitem value="Início" url="#{request.contextPath}/pages/index.xhtml"/>
+            <p:menuitem value="Usuários" url="#{request.contextPath}/pages/usuariosistema.xhtml"/>
+            <p:menuitem value="Cargos" url="#{request.contextPath}/pages/cargo.xhtml" />
+            <f:facet name="end">
+                <div class="ui-input-icon-left mr-2">
+                    <i class="pi pi-fw pi-search" />
+                    <p:inputText placeholder="Pesquisa"/>
+                </div>
+            </f:facet>
+        </p:megaMenu>
+    </h:form>
+
+    <h:form id="formCadastro">
+        <p:fieldset legend="Cadastro de usuário" toggleable="true">
+            <p:panel>
+                <p:panelGrid>
+                    <h:outputText value="Nome" for="nome_usuario"/>
+                    <p:inputText id="nome_usuario" value="#{usuarioSistemaBean.usuarioSistema.nome}"/>
+
+                    <h:outputText value="RA" for="ra_usuario"/>
+                    <p:inputText id="ra_usuario" value="#{usuarioSistemaBean.usuarioSistema.ra}"/>
+                </p:panelGrid>
+            </p:panel>
+        </p:fieldset>
+    </h:form>
+
+    <h:form id="formListagem">
+        <p:panel header="Usuários do Sistema">
+            <p:dataTable id="TbListagem" value="#{usuarioSistemaBean.usuariosSistema}" var="usuario">
+                <p:column headerText="Nome">
+                    <h:outputText value="#{usuario.nome}"/>
+                </p:column>
+                <p:column headerText="RA">
+                    <h:outputText value="#{usuario.ra}"/>
+                </p:column>
+                <p:column headerText="Curso">
+                    <h:outputText value="#{usuario.curso}"/>
+                </p:column>
+                <p:column headerText="Opções" filtertable="false">
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                     actionListener="#{usuarioSistemaBean.editar}"
+                                     styleClass="rounded-button ui-button-help ui-button-outlined">
+                        <f:attribute name="usuarioSelecionado" value="#{usuario}"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="pi pi-trash" title="Apagar"
+                                     actionListener="#{usuarioSistemaBean.remover}"
+                                     styleClass="rounded-button ui-button-danger ui-button-outlined">
+                        <f:attribute name="usuarioSelecionado" value="#{usuario}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+</h:body>
+</html>
