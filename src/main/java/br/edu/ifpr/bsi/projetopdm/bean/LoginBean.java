@@ -43,21 +43,23 @@ public class LoginBean implements Serializable {
 
             try {
                 FacesContext context = FacesContext.getCurrentInstance();
+                String contextPath = context.getExternalContext().getRequestContextPath();
+
                 switch (usuario.getNivelAcesso().toUpperCase()) {
                     case "ALUNO":
-                        context.getExternalContext().redirect("pages/aluno.xhtml");
+                        context.getExternalContext().redirect(contextPath + "/pages/aluno.xhtml");
                         System.out.println("login no aluno feito com sucesso!");
                         break;
                     case "MONITOR":
-                        context.getExternalContext().redirect("pages/monitor.xhtml");
+                        context.getExternalContext().redirect(contextPath + "/pages/monitor.xhtml");
                         System.out.println("login no monitor feito com sucesso!");
                         break;
                     case "COORDENADOR":
-                        context.getExternalContext().redirect("pages/coordenador.xhtml");
+                        context.getExternalContext().redirect(contextPath + "/pages/coordenador.xhtml");
                         System.out.println("login no monitor feito com sucesso!");
                         break;
                     case "ADMIN":
-                        context.getExternalContext().redirect("pages/admin.xhtml");
+                        context.getExternalContext().redirect(contextPath + "/pages/admin.xhtml");
                         System.out.println("login no admin feito com sucesso!");
                         break;
                     default:
@@ -76,12 +78,28 @@ public class LoginBean implements Serializable {
     }
 
     public void logout() {
-        UsuarioSistemaSingleton.resetInstance();
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
-            System.out.println("Logout feito com sucesso!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
+            // 1. Primeiro limpa o singleton
+            UsuarioSistemaSingleton.resetInstance();
+
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            String contextPath = facesContext.getExternalContext().getRequestContextPath();
+
+            try {
+                // 2. Faz o redirect ANTES de invalidar a sessão
+                String logoutURL = contextPath + "/pages/login.xhtml";
+                facesContext.getExternalContext().redirect(logoutURL);
+
+                // 3. Invalida a sessão DEPOIS do redirect
+                facesContext.getExternalContext().invalidateSession();
+
+                System.out.println("Logout feito com sucesso!");
+            } catch (IOException e) {
+                System.out.println("ERRO no logout: " + e.getMessage());
+                e.printStackTrace();
+            }
+            }
+
 }
+
+
