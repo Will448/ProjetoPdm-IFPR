@@ -23,7 +23,7 @@
   <!-- Página inicial -->
   <!-- Normalmente é uma página de login -->
   <welcome-file-list>
-    <welcome-file>pages/index.xhtml</welcome-file>
+    <welcome-file>pages/login.xhtml</welcome-file>
   </welcome-file-list>
 
   <!-- Estágio do Projeto -->
