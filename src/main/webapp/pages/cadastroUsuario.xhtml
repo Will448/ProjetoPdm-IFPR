@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Cadastro de Usuário</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e0e0e0;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+
+    </style>
+</h:head>
+
+<h:body>
+    <p:megaMenu orientation="horizontal">
+        <f:facet name="start">
+            <h:outputText value="Sistema de Monitorias - IFPR Palmas"
+                          style="font-weight: bold; font-size: 18px; padding-left: 1rem;" />
+        </f:facet>
+    </p:megaMenu>
+    <h:form styleClass="form-container">
+        <!-- Mensagens de sucesso/erro
+        <p:messages id="mensagens" showDetail="true" autoUpdate="true" closable="true"/>
+-->
+        <p:growl id="mensagens" />
+        <!-- Formulário centralizado -->
+        <p:panel header="#{usuarioSistemaBean.usuarioSistema.id == null ? 'Novo Usuário' : 'Editar Usuário'}">
+            <p:panelGrid columns="2" columnClasses="label,value" style="width:100%;">
+
+                <h:outputLabel value="RA:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.ra}" required="true" />
+
+                <h:outputLabel value="Nome:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.nome}" required="true" />
+
+                <h:outputLabel value="E-mail:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.email}" required="true" />
+
+                <h:outputLabel value="Telefone:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.telefone}" required="true" />
+
+                <h:outputLabel value="Curso:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.curso}" required="true" />
+
+                <h:outputLabel value="Período Acadêmico:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.periodoAcademico}" required="true" />
+
+                <h:outputLabel value="Login:" />
+                <p:inputText value="#{usuarioSistemaBean.usuarioSistema.login}" required="true" />
+
+                <h:outputLabel value="Senha:" />
+                <p:password value="#{usuarioSistemaBean.usuarioSistema.senha}"
+                            required="#{usuarioSistemaBean.usuarioSistema.id == null}"
+                            toggleMask="true"/>
+
+                <h:outputLabel value="Nível de Acesso:" />
+                <p:selectOneMenu value="#{usuarioSistemaBean.usuarioSistema.nivelAcesso}" required="true">
+                    <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                    <f:selectItem itemLabel="ALUNO" itemValue="ALUNO"/>
+                    <f:selectItem itemLabel="MONITOR" itemValue="MONITOR"/>
+                    <f:selectItem itemLabel="COORDENADOR" itemValue="COORDENADOR"/>
+                    <f:selectItem itemLabel="ADMIN" itemValue="ADMIN"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:commandButton
+                    value="Salvar"
+                    action="#{usuarioSistemaBean.salvar}"
+                    icon="pi pi-save"
+                    ajax="false"
+                    styleClass="ui-button-success" />
+
+            <p:spacer width="10"/>
+
+            <p:commandButton
+                    value="Cancelar"
+                    action="#{usuarioSistemaBean.cancelar}"
+                    icon="pi pi-times"
+                    styleClass="ui-button-secondary"
+                    immediate="true"
+                    ajax="false" />
+        </p:panel>
+    </h:form>
+
+</h:body>
+</html>

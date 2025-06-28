@@ -6,33 +6,75 @@
 
 <h:head>
     <title>Área do Administrador</title>
+    <style>
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-right: 1rem;
+        }
+
+        .logout-button {
+            background-color: #007ad9;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .welcome-panel {
+            margin: 1rem;
+        }
+
+        .quick-actions {
+            margin: 1rem;
+        }
+    </style>
 </h:head>
 
 <h:body>
+    <h:form>
+    <!-- Menu horizontal -->
+    <p:megaMenu orientation="horizontal">
+        <p:menuitem value="Início" url="#{request.contextPath}/pages/index.xhtml" icon="pi pi-home" />
+        <p:menuitem values="Início">
+            <p:commandButton value="Novo usuario" action="#{usuarioSistemaBean.novoUsuario}" icon="pi pi-user"
+                              styleClass="ui-button-flat ui-button-plain" />
+        </p:menuitem>
+        <p:menuitem value="Novo Evento" url="#{request.contextPath}/pages/cargo.xhtml" icon="pi pi-calendar-plus"/>
+        <f:facet name="end">
+            <div class="avatar-container">
+                <p:avatar size="large" shape="circle">
+                    <p:graphicImage value="../img/ftPerfil.png" />
+                </p:avatar>
+                <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
+                                 styleClass="logout-button ui-button-danger" />
+            </div>
+        </f:facet>
+    </p:megaMenu>
+    </h:form>
 
-        <!-- Menu horizontal -->
-        <p:megaMenu orientation="horizontal">
-            <p:menuitem value="Início" url="#{request.contextPath}/pages/index.xhtml" />
-            <p:menuitem value="Usuários" url="#{request.contextPath}/pages/usuariosistema.xhtml" />
-            <p:menuitem value="Cargos" url="#{request.contextPath}/pages/cargo.xhtml" />
-            <f:facet name="end">
-                <div class="ui-input-icon-left mr-2">
-                    <i class="pi pi-fw pi-search" />
-                    <p:inputText placeholder="Pesquisa" />
-                </div>
-            </f:facet>
-        </p:megaMenu>
-
-        <p:growl id="mensagens" />
-
+   <!-- <p:messages id="mensagens" autoUpdate="true" closable="true" showDetail="true" />
+-->
+    <p:growl id="mensagens" />
     <h:form id="formPrincipal">
-        <h1>Bem-vindo, #{usuarioSistemaBean.usuarioLogado.nome}</h1>
-        <h3>Você está na área do ADMINISTRADOR.</h3>
+
+        <!-- Mensagem de Boas-vindas -->
+        <p:panel class="welcome-panel">
+            <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
+            <p>Use o menu acima para gerenciar usuários, cargos e eventos do sistema.</p>
+        </p:panel>
+
+
 
         <!-- Tabela de usuários -->
-        <p:panel header="Usuários do Sistema" style="margin-top:20px;">
-            <p:dataTable id="TbListagem" value="#{usuarioSistemaBean.usuariosSistema}" var="usuario"
-                         rows="10" paginator="true" paginatorPosition="bottom" responsiveLayout="scroll">
+        <p:panel header="Usuários do Sistema" style="margin: 1rem;">
+            <p:dataTable id="TbListagem"
+                         value="#{usuarioSistemaBean.usuariosSistema}"
+                         var="usuario"
+                         rows="10"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         responsiveLayout="scroll"
+                         emptyMessage="Nenhum usuário encontrado.">
 
                 <p:column headerText="Nome" filterBy="#{usuario.nome}" filterMatchMode="contains">
                     <h:outputText value="#{usuario.nome}" />
@@ -46,28 +88,24 @@
                     <h:outputText value="#{usuario.curso}" />
                 </p:column>
 
-                <p:column headerText="Opções" style="width:120px;">
+                <p:column headerText="Ações" style="width:120px;">
                     <p:commandButton icon="pi pi-pencil" title="Editar"
                                      actionListener="#{usuarioSistemaBean.editar}"
                                      update=":formPrincipal:TbListagem :mensagens"
-                                     styleClass="rounded-button ui-button-help ui-button-outlined" >
+                                     styleClass="rounded-button ui-button-help ui-button-outlined">
                         <f:attribute name="usuarioSelecionado" value="#{usuario}" />
                     </p:commandButton>
 
-                    <p:commandButton icon="pi pi-trash" title="Apagar"
+                    <p:commandButton icon="pi pi-trash" title="Remover"
                                      actionListener="#{usuarioSistemaBean.remover}"
                                      update=":formPrincipal:TbListagem :mensagens"
                                      styleClass="rounded-button ui-button-danger ui-button-outlined"
-                                     onclick="return confirm('Deseja realmente apagar este usuário?');" >
+                                     onclick="return confirm('Deseja realmente remover este usuário?');">
                         <f:attribute name="usuarioSelecionado" value="#{usuario}" />
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
         </p:panel>
-
-        <!-- Botão Logout -->
-        <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
-                         style="margin-top:20px;" />
     </h:form>
 </h:body>
 </html>

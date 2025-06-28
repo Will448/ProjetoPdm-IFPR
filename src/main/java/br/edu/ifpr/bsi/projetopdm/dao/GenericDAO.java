@@ -29,9 +29,7 @@ public class GenericDAO<Entidade> {
             session.persist(entidade); // ou session.save(entidade)
             transacao.commit();
         } catch (RuntimeException e) {
-            if (transacao != null) transacao.rollback();
-            System.out.println("Erro ao salvar entidade: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -46,9 +44,7 @@ public class GenericDAO<Entidade> {
             session.persist(entidade);
             transacao.commit();
         } catch (RuntimeException e) {
-            if (transacao != null) transacao.rollback();
-            System.out.println("Erro ao inserir entidade: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -63,9 +59,7 @@ public class GenericDAO<Entidade> {
             session.remove(entidade);
             transacao.commit();
         } catch (RuntimeException e) {
-            if (transacao != null) transacao.rollback();
-            System.out.println("Erro ao remover entidade: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -80,9 +74,7 @@ public class GenericDAO<Entidade> {
             session.merge(entidade);
             transacao.commit();
         } catch (RuntimeException e) {
-            if (transacao != null) transacao.rollback();
-            System.out.println("Erro ao salvar ou alterar entidade: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -99,8 +91,7 @@ public class GenericDAO<Entidade> {
             criteria.select(root);
             resultado = session.createQuery(criteria).getResultList();
         } catch (RuntimeException e) {
-            System.out.println("Erro ao listar entidades: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -123,8 +114,7 @@ public class GenericDAO<Entidade> {
                 resultado = resultados.get(0);
             }
         } catch (RuntimeException e) {
-            System.out.println("Erro ao buscar entidade por ID: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }

@@ -10,6 +10,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
 import jakarta.inject.Named;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -47,13 +48,12 @@ public class adminBean implements Serializable {
         }
     }
 
-    // Método para remover um usuário selecionado
     public void remover(ActionEvent evento) {
         this.usuarioSistema = (UsuarioSistema) evento.getComponent().getAttributes().get("usuarioSelecionado");
         try {
             UsuarioSistemaDAO dao = new UsuarioSistemaDAO();
             dao.remover(usuarioSistema);
-            listar(); // Atualiza a lista após remoção
+            listar();
             FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário removido com sucesso", usuarioSistema.getNome());
             FacesContext.getCurrentInstance().addMessage(null, mensagem);
         } catch (Exception e) {
@@ -62,20 +62,60 @@ public class adminBean implements Serializable {
         }
     }
 
-    // Método para preparar a edição (pode abrir uma tela ou diálogo, por exemplo)
     public void editar(ActionEvent evento) {
         this.usuarioSistema = (UsuarioSistema) evento.getComponent().getAttributes().get("usuarioSelecionado");
-        // Aqui você pode colocar lógica para navegar para a página de edição ou abrir diálogo
-        // Exemplo: FacesContext.getCurrentInstance().getExternalContext().redirect("editarUsuario.xhtml");
-        System.out.println("Editar usuário: " + usuarioSistema.getNome());
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("cadastroUsuario.xhtml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    // Retorna o usuário logado (admin)
+    public void novoUsuario() {
+        this.usuarioSistema = new UsuarioSistema();
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("cadastroUsuario.xhtml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void salvar() {
+        try {
+            UsuarioSistemaDAO dao = new UsuarioSistemaDAO();
+
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true); // manter mensagens
+
+            if (usuarioSistema.getId() == null) {
+                dao.salvar(usuarioSistema);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuário cadastrado com sucesso!"));
+            } else {
+                dao.alterarSalvar(usuarioSistema);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuário atualizado com sucesso!"));
+            }
+
+            listar();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
+        } catch (Exception e) {
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar usuário", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, mensagem);
+        }
+    }
+
+    public void cancelar() {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao redirecionar", e);
+        }
+    }
+
     public UsuarioSistema getUsuarioLogado() {
         return UsuarioSistemaSingleton.getInstance();
     }
 
-    // Retorna o nível de acesso do usuário logado
     public String getNivelAcessoLogado() {
         UsuarioSistema logado = UsuarioSistemaSingleton.getInstance();
         return logado != null ? logado.getNivelAcesso() : null;
