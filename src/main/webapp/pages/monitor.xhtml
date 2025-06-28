@@ -63,9 +63,40 @@
     <!-- Mensagem de Boas-vindas -->
     <p:panel class="welcome-panel">
         <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
-        <p>Use o menu acima para gerenciar usuários, cargos e eventos do sistema.</p>
+        <p>Use o menu acima para cadastrar-se em monitoria e eventos do sistema.</p>
     </p:panel>
 
+    </h:form>
+
+    <h:form id="formMonitoria">
+        <p:panel header="Minhas Monitorias" style="margin: 1rem;">
+            <p:dataTable id="tabelaMonitorias"
+                         value="#{monitorBean.monitorias}"
+                         var="monitoria"
+                         paginator="true"
+                         rows="5"
+                         paginatorPosition="bottom"
+                         emptyMessage="Você ainda não cadastrou nenhuma monitoria."
+                         responsiveLayout="scroll">
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{monitoria.titulo}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{monitoria.descricao}" />
+                </p:column>
+
+                <p:column headerText="Data/Hora">
+                    <h:outputText value="#{monitoria.dataHora}" />
+                </p:column>
+
+                <p:column headerText="Local">
+                    <h:outputText value="#{monitoria.local}" />
+                </p:column>
+
+            </p:dataTable>
+        </p:panel>
     </h:form>
 </h:body>
 </html>

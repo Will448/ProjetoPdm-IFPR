@@ -13,7 +13,8 @@ import java.io.IOException;
         "/pages/admin.xhtml",
         "/pages/monitor.xhtml",
         "/pages/coordenador.xhtml",
-        "/pages/aluno.xhtml"
+        "/pages/aluno.xhtml",
+        "/pages/monitoria.xhtml"
         // Adicione outras páginas protegidas aqui, EXCETO login.xhtml
 })
 public class AuthGuard implements Filter {

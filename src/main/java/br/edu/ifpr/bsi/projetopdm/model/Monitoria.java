@@ -22,7 +22,7 @@ public class Monitoria extends GenericModel {
         private String Local;
 
     @JoinColumn
-    @OneToOne(cascade = CascadeType.ALL)//é usado para alterar os dados de pagamento dentro do funcionario
+    @OneToOne(cascade = CascadeType.ALL)//é usado para alterar os dados de pagamento dentro do monitor
     public UsuarioSistema usuarioSistema;
 
     public UsuarioSistema getUsuarioSistema() {

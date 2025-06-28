@@ -1,8 +1,8 @@
 Sistema de Monitorias e Eventos Acadêmicos – IFPR Campus Palmas 
 
-Local de Formação:Instituto Federal do Paraná – Campus Palmas                                              
-Professor Orientador: Eduardo Alba                                                      
-Turma: Sistemas de Informação – 5º Período                                                            
+Local de Formação:Instituto Federal do Paraná – Campus Palmas
+Professor Orientador: Eduardo Alba
+Turma: Sistemas de Informação – 5º Período
 Alunos: Willian Bongiovanni e Shayene Wosnes
 
  Sobre o Projeto
