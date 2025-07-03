@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Cadastro de Monitoria</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e0e0e0;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <p:megaMenu orientation="horizontal">
+        <f:facet name="start">
+            <h:outputText value="Sistema de Monitorias - IFPR Palmas"
+                          style="font-weight: bold; font-size: 18px; padding-left: 1rem;" />
+        </f:facet>
+    </p:megaMenu>
+
+    <h:form styleClass="form-container">
+        <p:growl id="mensagens" />
+
+        <p:panel header="#{monitoriaBean.monitoria.id == null ? 'Nova Monitoria' : 'Editar Monitoria'}">
+            <p:panelGrid columns="2" columnClasses="label,value" style="width:100%;">
+
+                <h:outputLabel value="Título:" />
+                <p:inputText value="#{monitoriaBean.monitoria.titulo}" required="true" />
+
+                <h:outputLabel value="Descrição:" />
+                <p:inputTextarea value="#{monitoriaBean.monitoria.descricao}" autoResize="true" rows="4" required="true" />
+
+                <h:outputLabel value="Data e Hora:" />
+                <p:inputText value="#{monitoriaBean.monitoria.dataHora}" required="true"/>
+
+                <h:outputLabel value="Local:" />
+                <p:inputText value="#{monitoriaBean.monitoria.local}" required="true"/>
+
+                <h:outputLabel value="Certificado:" />
+                <p:inputText value="#{monitoriaBean.monitoria.certificado}"/>
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:commandButton
+                    value="Salvar"
+                    action="#{monitoriaBean.salvar}"
+                    icon="pi pi-save"
+                    ajax="false"
+                    styleClass="ui-button-success" />
+
+            <p:spacer width="10"/>
+
+            <p:commandButton
+                    value="Cancelar"
+                    action="#{monitoriaBean.cancelar}"
+                    icon="pi pi-times"
+                    styleClass="ui-button-secondary"
+                    immediate="true"
+                    ajax="false" />
+        </p:panel>
+    </h:form>
+</h:body>
+</html>

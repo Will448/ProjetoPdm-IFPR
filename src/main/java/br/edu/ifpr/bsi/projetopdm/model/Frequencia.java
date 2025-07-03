@@ -1,60 +1,62 @@
 package br.edu.ifpr.bsi.projetopdm.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "tb_frequencia")
+public class Frequencia extends GenericModel {
 
-public class Frequencia {
+    @ManyToOne
+    @JoinColumn(name = "id_aluno", nullable = false)
+    private UsuarioSistema aluno;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @ManyToOne
+    @JoinColumn(name = "id_monitor", nullable = false)
+    private UsuarioSistema monitor;
 
-        @ManyToOne
-        private UsuarioSistema usuario;
-            @Column
-        private int totalHorasMonitoria;
-            @Column
-        private int totalHorasEventos;
-         @Column
-        private LocalDate dataGeracao;
+    @ManyToOne
+    @JoinColumn(name = "id_monitoria", nullable = false)
+    private Monitoria monitoria;
 
-        // Getters e Setters
+    @Column(name = "total_horas_monitoria")
+    private Integer totalHorasMonitoria;
 
+    @Column(name = "data_geracao")
+    private LocalDate dataGeracao;
 
-    public Long getId() {
-        return id;
+    // === Getters e Setters ===
+
+    public UsuarioSistema getAluno() {
+        return aluno;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAluno(UsuarioSistema aluno) {
+        this.aluno = aluno;
     }
 
-    public UsuarioSistema getUsuario() {
-        return usuario;
+    public UsuarioSistema getMonitor() {
+        return monitor;
     }
 
-    public void setUsuario(UsuarioSistema usuario) {
-        this.usuario = usuario;
+    public void setMonitor(UsuarioSistema monitor) {
+        this.monitor = monitor;
     }
 
-    public int getTotalHorasMonitoria() {
+    public Monitoria getMonitoria() {
+        return monitoria;
+    }
+
+    public void setMonitoria(Monitoria monitoria) {
+        this.monitoria = monitoria;
+    }
+
+    public Integer getTotalHorasMonitoria() {
         return totalHorasMonitoria;
     }
 
-    public void setTotalHorasMonitoria(int totalHorasMonitoria) {
+    public void setTotalHorasMonitoria(Integer totalHorasMonitoria) {
         this.totalHorasMonitoria = totalHorasMonitoria;
-    }
-
-    public int getTotalHorasEventos() {
-        return totalHorasEventos;
-    }
-
-    public void setTotalHorasEventos(int totalHorasEventos) {
-        this.totalHorasEventos = totalHorasEventos;
     }
 
     public LocalDate getDataGeracao() {

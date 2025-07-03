@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Registrar Frequência</title>
+</h:head>
+
+<h:body>
+
+    <h:form id="formFrequencia">
+
+        <h2>Registrar Frequência - #{frequenciaBean.monitoriaSelecionada.titulo}</h2>
+
+        <!-- Tabela de Inscritos -->
+        <p:dataTable id="tabelaInscritos"
+                     value="#{frequenciaBean.usuariosInscritos}"
+                     var="inscrito"
+                     selection="#{frequenciaBean.frequencia.aluno}"
+                     selectionMode="single"
+                     rowKey="#{inscrito.id}">
+
+            <p:column headerText="RA">
+                <h:outputText value="#{inscrito.ra}" />
+            </p:column>
+
+            <p:column headerText="Nome">
+                <h:outputText value="#{inscrito.nome}" />
+            </p:column>
+
+        </p:dataTable>
+
+
+        <br/>
+
+        <!-- Campo Total de Horas -->
+        <p:outputLabel for="totalHoras" value="Total de Horas da Monitoria:"/>
+        <p:inputText id="totalHoras"
+                     value="#{frequenciaBean.frequencia.totalHorasMonitoria}"
+                     required="true" />
+
+        <br/><br/>
+
+        <!-- Botão para salvar -->
+        <p:commandButton value="Salvar Frequência"
+                         action="#{frequenciaBean.registrarFrequencia}"
+                         update=":mensagens" />
+
+    </h:form>
+
+    <p:growl id="mensagens" showDetail="true" />
+
+</h:body>
+</html>

@@ -2,6 +2,7 @@ package br.edu.ifpr.bsi.projetopdm.dao;
 
 import br.edu.ifpr.bsi.projetopdm.model.Frequencia;
 import br.edu.ifpr.bsi.projetopdm.model.UsuarioSistema;
+import br.edu.ifpr.bsi.projetopdm.model.Monitoria;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -11,16 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FrequenciaDAOTest {
 
-
     @Test
     public void testSalvarFrequencia() {
         UsuarioSistemaDAO usuarioDAO = new UsuarioSistemaDAO();
-        UsuarioSistema usuario = usuarioDAO.buscarPorLogin("joao.monitor"); // Altere conforme login existente
+        MonitoriaDAO monitoriaDAO = new MonitoriaDAO();
+
+        UsuarioSistema monitor = usuarioDAO.buscarPorLogin("joao.monitor"); // Login real
+        UsuarioSistema aluno = usuarioDAO.buscarPorLogin("joao.aluno");     // Login real de um aluno
+        Monitoria monitoria = monitoriaDAO.buscarPorId(1L);                 // ID real da monitoria
 
         Frequencia frequencia = new Frequencia();
-        frequencia.setUsuario(usuario);
+        frequencia.setMonitor(monitor);            // agora é monitor
+        frequencia.setAluno(aluno);                // novo: aluno vinculado
+        frequencia.setMonitoria(monitoria);        // nova relação com monitoria
         frequencia.setTotalHorasMonitoria(20);
-        frequencia.setTotalHorasEventos(5);
         frequencia.setDataGeracao(LocalDate.now());
 
         FrequenciaDAO dao = new FrequenciaDAO();
@@ -33,13 +38,14 @@ public class FrequenciaDAOTest {
     @Test
     public void testBuscarPorId() {
         FrequenciaDAO dao = new FrequenciaDAO();
-        Frequencia frequencia = dao.buscarPorId(1L); // Substitua pelo ID real existente
+        Frequencia frequencia = dao.buscarPorId(1L); // Substitua pelo ID real
 
         assertNotNull(frequencia);
         System.out.println("Frequência encontrada:");
         System.out.println("ID: " + frequencia.getId());
         System.out.println("Data: " + frequencia.getDataGeracao());
-        System.out.println("Usuário: " + frequencia.getUsuario().getNome());
+        System.out.println("Monitor: " + frequencia.getMonitor().getNome());
+        System.out.println("Aluno: " + frequencia.getAluno().getNome());
     }
 
     @Test
@@ -48,14 +54,14 @@ public class FrequenciaDAOTest {
         Frequencia frequencia = dao.buscarPorId(1L); // Substitua pelo ID real
 
         assertNotNull(frequencia);
-        frequencia.setTotalHorasEventos(10);
+        frequencia.setTotalHorasMonitoria(30); // alterando para testar
         dao.alterarSalvar(frequencia);
 
         Frequencia alterada = dao.buscarPorId(frequencia.getId());
-        assertEquals(10, alterada.getTotalHorasEventos());
+        assertEquals(30, alterada.getTotalHorasMonitoria());
 
         System.out.println("Frequência atualizada:");
-        System.out.println("Total Eventos: " + alterada.getTotalHorasEventos());
+        System.out.println("Total Horas Monitoria: " + alterada.getTotalHorasMonitoria());
     }
 
     @Test
@@ -67,7 +73,9 @@ public class FrequenciaDAOTest {
         assertFalse(lista.isEmpty());
 
         for (Frequencia f : lista) {
-            System.out.println("ID: " + f.getId() + " | Usuário: " + f.getUsuario().getLogin());
+            System.out.println("ID: " + f.getId() +
+                    " | Monitor: " + f.getMonitor().getLogin() +
+                    " | Aluno: " + f.getAluno().getLogin());
         }
     }
 

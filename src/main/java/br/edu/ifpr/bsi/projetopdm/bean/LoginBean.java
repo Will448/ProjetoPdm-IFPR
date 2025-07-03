@@ -87,7 +87,7 @@ public class LoginBean implements Serializable {
 
             try {
                 // 2. Faz o redirect ANTES de invalidar a sessão
-                String logoutURL = contextPath + "/pages/login.xhtml";
+                String logoutURL = contextPath + "/pages/index.xhtml";
                 facesContext.getExternalContext().redirect(logoutURL);
 
                 // 3. Invalida a sessão DEPOIS do redirect

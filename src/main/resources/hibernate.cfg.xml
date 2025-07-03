@@ -33,5 +33,8 @@
         <mapping
                 class="br.edu.ifpr.bsi.projetopdm.model.Frequencia"/>
 
+        <mapping class="br.edu.ifpr.bsi.projetopdm.model.Inscricao"/>
+
+
     </session-factory>
 </hibernate-configuration>

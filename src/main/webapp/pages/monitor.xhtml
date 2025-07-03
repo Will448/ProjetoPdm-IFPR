@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html  xmlns="http://www.w3.org/1999/xhtml"
-       xmlns:h="http://xmlns.jcp.org/jsf/html"
-       xmlns:f="http://xmlns.jcp.org/jsf/core"
-       xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Área do Monitor</title>
@@ -29,7 +29,6 @@
             margin: 1rem;
         }
     </style>
-
 </h:head>
 
 <h:body>
@@ -37,12 +36,12 @@
     <h:form>
         <!-- Menu horizontal -->
         <p:megaMenu orientation="horizontal">
-            <p:menuitem value="Início" url="#{request.contextPath}/pages/index.xhtml" icon="pi pi-home" />
+            <p:menuitem value="Início" url="#{request.contextPath}/pages/monitor.xhtml" icon="pi pi-home" />
             <p:menuitem values="Início">
-                <p:commandButton value="Novo usuario" action="#{usuarioSistemaBean.novoUsuario}" icon="pi pi-user"
-                                 styleClass="ui-button-flat ui-button-plain" />
+                <p:commandButton value="registrar frequencia" action="#{usuarioSistemaBean.novoUsuario}"
+                                 icon="pi pi-user" styleClass="ui-button-flat ui-button-plain" />
             </p:menuitem>
-            <p:menuitem value="Novo Evento" url="#{request.contextPath}/pages/cargo.xhtml" icon="pi pi-calendar-plus"/>
+
             <f:facet name="end">
                 <div class="avatar-container">
                     <p:avatar size="large" shape="circle">
@@ -55,18 +54,15 @@
         </p:megaMenu>
     </h:form>
 
-    <!-- <p:messages id="mensagens" autoUpdate="true" closable="true" showDetail="true" />
- -->
     <p:growl id="mensagens" />
+
     <h:form id="formPrincipal">
-
-    <!-- Mensagem de Boas-vindas -->
-    <p:panel class="welcome-panel">
-        <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
-        <p>Use o menu acima para cadastrar-se em monitoria e eventos do sistema.</p>
-    </p:panel>
-
-    </h:form>
+        <!-- Mensagem de Boas-vindas -->
+        <p:panel class="welcome-panel">
+            <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
+            <p>Use o menu acima para cadastrar-se em monitoria e eventos do sistema.</p>
+        </p:panel>
+    </h:form>'
 
     <h:form id="formMonitoria">
         <p:panel header="Minhas Monitorias" style="margin: 1rem;">
@@ -95,8 +91,19 @@
                     <h:outputText value="#{monitoria.local}" />
                 </p:column>
 
+                <p:column headerText="Ações">
+                    <p:commandButton icon="pi pi-check"
+                                     title="Registrar Frequência"
+                                     action="#{frequenciaBean.prepararRegistro(monitoria)}"
+                                     ajax="false"
+                                     styleClass="ui-button-success ui-button-flat" />
+                </p:column>
+
+
             </p:dataTable>
+
         </p:panel>
     </h:form>
+
 </h:body>
 </html>
