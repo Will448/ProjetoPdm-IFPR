@@ -1,12 +1,14 @@
 package br.edu.ifpr.bsi.projetopdm.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "tb_inscricao")
 public class Inscricao extends GenericModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     // Relação com o aluno (UsuarioSistema com perfil ALUNO)
     @ManyToOne
@@ -15,10 +17,25 @@ public class Inscricao extends GenericModel {
 
     // Relação com a monitoria
     @ManyToOne
-    @JoinColumn(name = "id_monitoria", nullable = false)
+    @JoinColumn(name = "id_monitoria")
     private Monitoria monitoria;
 
-    // Getters e Setters
+    // ✅ Nova relação com o evento
+    @ManyToOne
+    @JoinColumn(name = "id_evento")
+    private Evento evento;
+
+    // GETTERS e SETTERS
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public UsuarioSistema getAluno() {
         return aluno;
@@ -34,5 +51,13 @@ public class Inscricao extends GenericModel {
 
     public void setMonitoria(Monitoria monitoria) {
         this.monitoria = monitoria;
+    }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
     }
 }

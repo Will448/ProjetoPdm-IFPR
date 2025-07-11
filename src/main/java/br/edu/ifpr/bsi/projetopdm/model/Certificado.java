@@ -1,9 +1,9 @@
 package br.edu.ifpr.bsi.projetopdm.model;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table (name = "tb_certificado")
-
+@Table(name = "tb_certificado")
 public class Certificado {
 
     @Id
@@ -14,15 +14,18 @@ public class Certificado {
     private UsuarioSistema participante;
 
     @Column
-    private String Titulo;
+    private String titulo;
+
     @Column
-    private String Descricao;
+    private String descricao;
 
     @Column
     private String data;
 
     @Column
-    private String Duracao;
+    private String duracao;
+
+    // Getters e setters
 
     public Long getId() {
         return id;
@@ -40,30 +43,20 @@ public class Certificado {
         this.participante = participante;
     }
 
-
-
-    public String getDuracao() {
-        return Duracao;
-    }
-
-    public void setDuracao(String duracao) {
-        Duracao = duracao;
-    }
-
     public String getTitulo() {
-        return Titulo;
+        return titulo;
     }
 
     public void setTitulo(String titulo) {
-        Titulo = titulo;
+        this.titulo = titulo;
     }
 
     public String getDescricao() {
-        return Descricao;
+        return descricao;
     }
 
     public void setDescricao(String descricao) {
-        Descricao = descricao;
+        this.descricao = descricao;
     }
 
     public String getData() {
@@ -74,5 +67,11 @@ public class Certificado {
         this.data = data;
     }
 
+    public String getDuracao() {
+        return duracao;
+    }
 
+    public void setDuracao(String duracao) {
+        this.duracao = duracao;
+    }
 }

@@ -45,6 +45,7 @@ public class LoginBean implements Serializable {
                 FacesContext context = FacesContext.getCurrentInstance();
                 String contextPath = context.getExternalContext().getRequestContextPath();
 
+
                 switch (usuario.getNivelAcesso().toUpperCase()) {
                     case "ALUNO":
                         context.getExternalContext().redirect(contextPath + "/pages/aluno.xhtml");
@@ -79,27 +80,86 @@ public class LoginBean implements Serializable {
 
     public void logout() {
 
-            // 1. Primeiro limpa o singleton
-            UsuarioSistemaSingleton.resetInstance();
+        // 1. Primeiro limpa o singleton
+        UsuarioSistemaSingleton.resetInstance();
 
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            String contextPath = facesContext.getExternalContext().getRequestContextPath();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String contextPath = facesContext.getExternalContext().getRequestContextPath();
 
-            try {
-                // 2. Faz o redirect ANTES de invalidar a sessão
-                String logoutURL = contextPath + "/pages/index.xhtml";
-                facesContext.getExternalContext().redirect(logoutURL);
+        try {
+            // 2. Faz o redirect ANTES de invalidar a sessão
+            String logoutURL = contextPath + "/pages/index.xhtml";
+            facesContext.getExternalContext().redirect(logoutURL);
 
-                // 3. Invalida a sessão DEPOIS do redirect
-                facesContext.getExternalContext().invalidateSession();
+            // 3. Invalida a sessão DEPOIS do redirect
+            facesContext.getExternalContext().invalidateSession();
 
-                System.out.println("Logout feito com sucesso!");
-            } catch (IOException e) {
-                System.out.println("ERRO no logout: " + e.getMessage());
-                e.printStackTrace();
-            }
-            }
+            System.out.println("Logout feito com sucesso!");
+        } catch (IOException e) {
+            System.out.println("ERRO no logout: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
+    private UsuarioSistema usuarioEditavel;
+
+    public UsuarioSistema getUsuarioEditavel() {
+        if (usuarioEditavel == null) {
+            // Copia dados do usuário logado para edição
+            UsuarioSistema u = UsuarioSistemaSingleton.getInstance();
+            usuarioEditavel = new UsuarioSistema();
+
+            usuarioEditavel.setId(u.getId());
+            usuarioEditavel.setLogin(u.getLogin());
+            usuarioEditavel.setEmail(u.getEmail());
+            usuarioEditavel.setSenha(u.getSenha());
+        }
+        return usuarioEditavel;
+    }
+
+    public void atualizarPerfil() {
+        UsuarioSistemaDAO dao = new UsuarioSistemaDAO();
+
+        UsuarioSistema existente = dao.buscarPorLogin(usuarioEditavel.getLogin());
+        if (existente != null && !existente.getId().equals(usuarioEditavel.getId())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login já está em uso por outro usuário.", ""));
+            return;
+        }
+
+        try {
+            // Copia os campos obrigatórios do singleton para o objeto editável
+            UsuarioSistema original = UsuarioSistemaSingleton.getInstance();
+
+            usuarioEditavel.setRa(original.getRa());
+            usuarioEditavel.setNome(original.getNome());
+            usuarioEditavel.setTelefone(original.getTelefone());
+            usuarioEditavel.setCurso(original.getCurso());
+            usuarioEditavel.setPeriodoAcademico(original.getPeriodoAcademico());
+            usuarioEditavel.setNivelAcesso(original.getNivelAcesso());
+
+            dao.atualizarUsuario(usuarioEditavel);
+
+            UsuarioSistemaSingleton.setInstance(usuarioEditavel);
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Perfil atualizado com sucesso!", ""));
+
+            usuarioEditavel = null; // limpa para próxima edição
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao atualizar perfil", e.getMessage()));
+        }
+    }
+
+
+
+
+
+    public UsuarioSistema getUsuarioLogado() {
+        return UsuarioSistemaSingleton.getInstance();
+    }
 }
 
 

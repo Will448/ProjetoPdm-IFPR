@@ -32,38 +32,39 @@
 
 <h:body>
     <h:form>
-    <!-- Menu horizontal -->
-    <p:megaMenu orientation="horizontal">
-        <p:menuitem value="Início" url="#{request.contextPath}/pages/index.xhtml" icon="pi pi-home" />
-        <p:menuitem values="Início">
-            <p:commandButton value="Novo usuario" action="#{usuarioSistemaBean.novoUsuario}" icon="pi pi-user"
-                              styleClass="ui-button-flat ui-button-plain" />
-        </p:menuitem>
-        <p:menuitem value="Novo Evento" url="#{request.contextPath}/pages/cargo.xhtml" icon="pi pi-calendar-plus"/>
-        <f:facet name="end">
-            <div class="avatar-container">
-                <p:avatar size="large" shape="circle">
-                    <p:graphicImage value="../img/ftPerfil.png" />
-                </p:avatar>
-                <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
-                                 styleClass="logout-button ui-button-danger" />
-            </div>
-        </f:facet>
-    </p:megaMenu>
+        <!-- Menu horizontal -->
+        <p:megaMenu orientation="horizontal">
+            <p:menuitem value="Início" url="#{request.contextPath}/pages/index.xhtml" icon="pi pi-home" />
+            <p:menuitem values="Início">
+                <p:commandButton value="Novo usuario" action="#{usuarioSistemaBean.novoUsuario}" icon="pi pi-user"
+                                 styleClass="ui-button-flat ui-button-plain" />
+            </p:menuitem>
+            <p:menuitem value="Novo Evento" url="#{request.contextPath}/pages/evento.xhtml" icon="pi pi-calendar-plus"/>
+            <p:menuitem value="Nova monitoria" url="#{request.contextPath}/pages/NovaMonitoria.xhtml" icon="pi pi-calendar-plus"/>
+            <f:facet name="end">
+                <div class="avatar-container">
+                    <p:avatar size="large" shape="circle">
+                        <p:graphicImage value="../img/ftPerfil.png" />
+                    </p:avatar>
+                    <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
+                                     styleClass="logout-button ui-button-danger" />
+                </div>
+            </f:facet>
+        </p:megaMenu>
     </h:form>
 
-   <!-- <p:messages id="mensagens" autoUpdate="true" closable="true" showDetail="true" />
--->
     <p:growl id="mensagens" />
+
     <h:form id="formPrincipal">
+
+        <!-- Chamada para carregar TODAS as monitorias ao entrar na tela -->
+        <f:event type="preRenderView" listener="#{monitoriaBean.listarTodasMonitorias}" />
 
         <!-- Mensagem de Boas-vindas -->
         <p:panel class="welcome-panel">
             <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
-            <p>Use o menu acima para gerenciar usuários, cargos e eventos do sistema.</p>
+            <p>Use o menu acima para gerenciar usuários, monitorias e eventos do sistema.</p>
         </p:panel>
-
-
 
         <!-- Tabela de usuários -->
         <p:panel header="Usuários do Sistema" style="margin: 1rem;">
@@ -106,6 +107,92 @@
                 </p:column>
             </p:dataTable>
         </p:panel>
+
+        <!-- Tabela de monitorias -->
+        <p:panel header="Monitorias Cadastradas" style="margin: 1rem;">
+            <p:dataTable id="tbMonitorias"
+                         value="#{monitoriaBean.monitorias}"
+                         var="m"
+                         rows="10"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         emptyMessage="Nenhuma monitoria encontrada.">
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{m.titulo}" />
+                </p:column>
+
+                <p:column headerText="Data e Hora">
+                    <h:outputText value="#{m.dataHora}" />
+                </p:column>
+
+                <p:column headerText="Local">
+                    <h:outputText value="#{m.local}" />
+                </p:column>
+
+                <p:column headerText="Ações">
+                    <p:column headerText="Ações" style="width:120px;">
+
+                        <!-- Botão Editar Monitoria (ícone apenas, com estilo igual ao de usuários) -->
+                        <p:commandButton icon="pi pi-pencil" title="Editar"
+                                         action="#{monitoriaBean.editarMonitoria(m)}"
+                                         update="tbMonitorias mensagens"
+                                         styleClass="rounded-button ui-button-help ui-button-outlined" />
+
+
+
+                        <!-- Botão Excluir Monitoria (ícone apenas, com estilo igual ao de usuários) -->
+                        <p:commandButton icon="pi pi-trash" title="Remover"
+                                         actionListener="#{monitoriaBean.removerMonitoria(m)}"
+                                         update="tbMonitorias mensagens"
+                                         styleClass="rounded-button ui-button-danger ui-button-outlined"
+                                         onclick="return confirm('Deseja realmente remover esta monitoria?');" />
+
+                    </p:column>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+        <p:panel header="Eventos Cadastrados" style="margin: 1rem;">
+            <p:dataTable id="tbEventos"
+                         value="#{eventoBean.eventos}"
+                         var="e"
+                         rows="10"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         emptyMessage="Nenhum evento encontrado.">
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{e.titulo}" />
+                </p:column>
+
+                <p:column headerText="Data">
+                    #{e.data}
+                </p:column>
+
+                <p:column headerText="Local">
+                    <h:outputText value="#{e.local}" />
+                </p:column>
+
+                <p:column headerText="Ações" style="width:120px;">
+
+                    <!-- Botão Editar Evento -->
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                     action="#{eventoBean.editarEvento(e)}"
+                                     update="@form"
+                                     styleClass="rounded-button ui-button-help ui-button-outlined" />
+
+                    <!-- Botão Excluir Evento -->
+                    <p:commandButton icon="pi pi-trash" title="Remover"
+                                     actionListener="#{eventoBean.removerEvento(e)}"
+                                     update="@form"
+                                     styleClass="rounded-button ui-button-danger ui-button-outlined"
+                                     onclick="return confirm('Deseja realmente remover este evento?');" />
+
+                </p:column>
+
+            </p:dataTable>
+        </p:panel>
+
     </h:form>
 </h:body>
 </html>

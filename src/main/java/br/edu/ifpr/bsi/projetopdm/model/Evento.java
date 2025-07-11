@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "tb_evento")
 public class Evento {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +21,19 @@ public class Evento {
 
     @Column
     private String descricao;
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
+    }
+
+    @Column(nullable = false)
+    private String responsavel;
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -62,4 +74,6 @@ public class Evento {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+
 }

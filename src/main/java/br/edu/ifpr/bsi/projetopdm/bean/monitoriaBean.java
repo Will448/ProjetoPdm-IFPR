@@ -2,6 +2,7 @@ package br.edu.ifpr.bsi.projetopdm.bean;
 
 import br.edu.ifpr.bsi.projetopdm.dao.FrequenciaDAO;
 import br.edu.ifpr.bsi.projetopdm.dao.MonitoriaDAO;
+import br.edu.ifpr.bsi.projetopdm.dao.UsuarioSistemaDAO;
 import br.edu.ifpr.bsi.projetopdm.model.Frequencia;
 import br.edu.ifpr.bsi.projetopdm.model.Monitoria;
 import br.edu.ifpr.bsi.projetopdm.model.UsuarioSistema;
@@ -24,6 +25,8 @@ public class monitoriaBean implements Serializable {
 
     private Monitoria monitoriaSelecionada;
 
+    private Monitoria monitoria = new Monitoria();  // ✅ CAMPO ADICIONADO
+
     private Frequencia frequencia = new Frequencia();
 
     private final MonitoriaDAO monitoriaDAO = new MonitoriaDAO();
@@ -31,23 +34,29 @@ public class monitoriaBean implements Serializable {
 
     @PostConstruct
     public void listarMonitorias() {
-        try {
-            UsuarioSistema monitor = UsuarioSistemaSingleton.getInstance();
-            if (monitor != null) {
-                monitorias = monitoriaDAO.listarPorUsuarioId(monitor.getId());
+       try {
+            UsuarioSistema professor = UsuarioSistemaSingleton.getInstance();
+            if (professor != null) {
+                monitorias = monitoriaDAO.listarPorUsuarioId(professor.getId());
             }
+
+            // Exemplo de buscar todos monitores (mude conforme sua DAO)
+            monitores = monitoriaDAO.buscarTodosMonitores(); // Crie esse método na DAO se ainda não tiver
         } catch (Exception e) {
-            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao listar monitorias", e.getMessage());
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao listar monitorias/monitores", e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, mensagem);
         }
     }
+
+
 
     public void registrarFrequencia(Monitoria monitoria) {
         try {
             UsuarioSistema monitor = UsuarioSistemaSingleton.getInstance();
 
             Frequencia novaFrequencia = new Frequencia();
-            novaFrequencia.setMonitor(monitor); // monitor é do tipo UsuarioSistema
+            novaFrequencia.setMonitor(monitor);
+            novaFrequencia.setMonitoria(monitoria);
             novaFrequencia.setDataGeracao(LocalDate.now());
             novaFrequencia.setTotalHorasMonitoria(2);
 
@@ -60,8 +69,79 @@ public class monitoriaBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, mensagem);
         }
     }
+    public void salvar() {
+        try {
+            UsuarioSistema professor = UsuarioSistemaSingleton.getInstance();
+            monitoria.setUsuarioSistema(professor); // Define o usuário atual como responsável pela monitoria
 
-    // Getters e Setters
+            monitoriaDAO.salvar(monitoria); // Salva a nova monitoria
+
+            monitoria = new Monitoria(); // Limpa o formulário
+            listarMonitorias(); // Atualiza listas após salvar
+
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, "Monitoria salva com sucesso!", null);
+            FacesContext.getCurrentInstance().addMessage(null, mensagem);
+        } catch (Exception e) {
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar monitoria", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, mensagem);
+        }
+    }
+
+    private List<UsuarioSistema> monitores; // nova lista
+    private UsuarioSistema monitorSelecionado; // monitor escolhido
+    public String editarMonitoria(Monitoria m) {
+        this.monitoria = m;
+        return "/pages/NovaMonitoria.xhtml?faces-redirect=true";
+    }
+    public void listarTodasMonitorias() {
+        try {
+            this.monitorias = monitoriaDAO.listarTodas();
+        } catch (Exception e) {
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao listar todas as monitorias", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, mensagem);
+        }
+    }
+    public void removerMonitoria(Monitoria monitoria) {
+        try {
+            monitoriaDAO.remover(monitoria);
+            listarTodasMonitorias(); // Atualiza a lista após remover
+
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, "Monitoria removida com sucesso!", null);
+            FacesContext.getCurrentInstance().addMessage(null, mensagem);
+        } catch (Exception e) {
+            FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao remover monitoria", e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, mensagem);
+        }
+    }
+
+    // Getters e setters:
+    public List<UsuarioSistema> getMonitores() {
+        return monitores;
+    }
+
+    public void setMonitores(List<UsuarioSistema> monitores) {
+        this.monitores = monitores;
+    }
+
+    public UsuarioSistema getMonitorSelecionado() {
+        return monitorSelecionado;
+    }
+
+    public void setMonitorSelecionado(UsuarioSistema monitorSelecionado) {
+        this.monitorSelecionado = monitorSelecionado;
+    }
+
+    // ✅ GETTERS E SETTERS NOVOS
+
+    public Monitoria getMonitoria() {
+        return monitoria;
+    }
+
+    public void setMonitoria(Monitoria monitoria) {
+        this.monitoria = monitoria;
+    }
+
+    // Getters e Setters já existentes
 
     public List<Monitoria> getMonitorias() {
         return monitorias;

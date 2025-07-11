@@ -26,7 +26,7 @@ public class GenericDAO<Entidade> {
 
         try {
             transacao = session.beginTransaction();
-            session.persist(entidade); // ou session.save(entidade)
+            session.merge(entidade);  // ← AGORA REANEXA AUTOMATICAMENTE!
             transacao.commit();
         } catch (RuntimeException e) {
             throw e;
@@ -35,19 +35,9 @@ public class GenericDAO<Entidade> {
         }
     }
 
-    public void inserir(Entidade entidade) {
-        Transaction transacao = null;
-        Session session = HibernateHelper.getFabricaDeSessoes().openSession();
 
-        try {
-            transacao = session.beginTransaction();
-            session.persist(entidade);
-            transacao.commit();
-        } catch (RuntimeException e) {
-            throw e;
-        } finally {
-            session.close();
-        }
+    public void inserir(Entidade entidade) {
+        salvar(entidade);
     }
 
     public void remover(Entidade entidade) {
@@ -66,12 +56,16 @@ public class GenericDAO<Entidade> {
     }
 
     public void alterarSalvar(Entidade entidade) {
+        salvarOuAtualizar(entidade);
+    }
+
+    public void salvarOuAtualizar(Entidade entidade) {
         Transaction transacao = null;
         Session session = HibernateHelper.getFabricaDeSessoes().openSession();
 
         try {
             transacao = session.beginTransaction();
-            session.merge(entidade);
+            session.merge(entidade); // merge: insere ou atualiza
             transacao.commit();
         } catch (RuntimeException e) {
             throw e;

@@ -6,6 +6,7 @@ import br.edu.ifpr.bsi.projetopdm.model.Monitoria;
 import br.edu.ifpr.bsi.projetopdm.model.UsuarioSistema;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate; // ✅ Importação adicionada
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,8 +24,8 @@ public class AvalDAOTest {
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setAluno(aluno);
         avaliacao.setMonitoria(monitoria);
-        avaliacao.setNota(9.5f);
-        avaliacao.setData("2025-05-19");
+        avaliacao.setNota(9.5);
+        avaliacao.setData(LocalDate.parse("2025-05-19")); // ✅ Conversão de String para LocalDate
 
         AvaliacaoDAO dao = new AvaliacaoDAO();
         dao.salvar(avaliacao);
@@ -50,7 +51,7 @@ public class AvalDAOTest {
         Avaliacao avaliacao = dao.buscarPorId(1L); // Substitua por um ID existente
 
         assertNotNull(avaliacao);
-        avaliacao.setNota(8.0f);
+        avaliacao.setNota(8.0);
         dao.alterarSalvar(avaliacao);
 
         Avaliacao alterada = dao.buscarPorId(avaliacao.getId());
@@ -74,7 +75,6 @@ public class AvalDAOTest {
                     " - Monitoria: " + (a.getMonitoria() != null ? a.getMonitoria().getTitulo() : "Sem monitoria"));
         }
     }
-
 
     @Test
     public void testRemoverAvaliacao() {

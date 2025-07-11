@@ -1,31 +1,35 @@
+
 package br.edu.ifpr.bsi.projetopdm.dao;
+
 import br.edu.ifpr.bsi.projetopdm.helpers.HibernateHelper;
 import br.edu.ifpr.bsi.projetopdm.model.Avaliacao;
+import br.edu.ifpr.bsi.projetopdm.model.UsuarioSistema;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 
-public class AvaliacaoDAO extends GenericDAO<Avaliacao>{
+import java.util.List;
+
+public class AvaliacaoDAO extends GenericDAO<Avaliacao> {
 
     public AvaliacaoDAO() {
         super();
     }
 
-    public Avaliacao buscarPorID (String id){
+    public List<Avaliacao> buscarAvaliacoesPorAluno(UsuarioSistema aluno) {
         Session session = HibernateHelper.getFabricaDeSessoes().openSession();
-        Avaliacao avaliacao = null;
+        List<Avaliacao> resultado = null;
+
 
         try {
-            String hql = "FROM Avaliacao u WHERE u.id = :id";
-            Query<Avaliacao> query = session.createQuery(hql, Avaliacao.class);
-            query.setParameter("id", id);
-
-            avaliacao = query.uniqueResult();
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar usuário por id: " + e.getMessage());
+            resultado = session
+                    .createQuery("FROM Avaliacao a WHERE a.aluno = :aluno", Avaliacao.class)
+                    .setParameter("aluno", aluno)
+                    .getResultList();
+        } catch (RuntimeException e) {
+            throw e;
         } finally {
             session.close();
         }
 
-        return avaliacao;
+        return resultado;
     }
 }

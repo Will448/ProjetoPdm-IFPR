@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Área do Monitor</title>
+    <title>Área do Professor</title>
 
     <style>
         .avatar-container {
@@ -29,6 +29,7 @@
             margin: 1rem;
         }
     </style>
+
 </h:head>
 
 <h:body>
@@ -36,7 +37,11 @@
     <h:form>
         <!-- Menu horizontal -->
         <p:megaMenu orientation="horizontal">
-            <p:menuitem value="Início" url="#{request.contextPath}/pages/monitor.xhtml" icon="pi pi-home" />
+            <p:menuitem value="Início" url="#{request.contextPath}/pages/professor.xhtml" icon="pi pi-home" />
+
+            <p:menuitem value="Nova Monitoria" url="#{request.contextPath}/pages/NovaMonitoria.xhtml" icon="pi pi-calendar-plus" />
+
+            <p:menuitem value="Novo Evento" url="#{request.contextPath}/pages/evento.xhtml" icon="pi pi-calendar-plus" />
             <p:menuitem value="Editar Perfil"
                         url="#{request.contextPath}/pages/editar.xhtml"
                         icon="pi pi-user-edit" />
@@ -44,7 +49,7 @@
             <f:facet name="end">
                 <div class="avatar-container">
                     <p:avatar size="large" shape="circle">
-                        <p:graphicImage value="../img/ftProfessor.jpg" />
+                        <p:graphicImage value="../img/image-3.png" />
                     </p:avatar>
                     <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
                                      styleClass="logout-button ui-button-danger" />
@@ -58,15 +63,15 @@
     <h:form id="formPrincipal">
         <!-- Mensagem de Boas-vindas -->
         <p:panel class="welcome-panel">
-            <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
-            <p>Use o menu acima para cadastrar-se em monitoria e eventos do sistema.</p>
+            <h3>Olá, <strong>#{professorBean.usuarioLogado.nome}</strong>!</h3>
+            <p>Use o menu acima para cadastrar novas monitorias ou eventos.</p>
         </p:panel>
-    </h:form>'
+    </h:form>
 
-    <h:form id="formMonitoria">
+    <h:form id="formMonitorias">
         <p:panel header="Minhas Monitorias" style="margin: 1rem;">
             <p:dataTable id="tabelaMonitorias"
-                         value="#{monitorBean.monitorias}"
+                         value="#{monitoriaBean.monitorias}"
                          var="monitoria"
                          paginator="true"
                          rows="5"
@@ -90,17 +95,7 @@
                     <h:outputText value="#{monitoria.local}" />
                 </p:column>
 
-                <p:column headerText="Ações">
-                    <p:commandButton icon="pi pi-check"
-                                     title="Registrar Frequência"
-                                     action="#{frequenciaBean.prepararRegistro(monitoria)}"
-                                     ajax="false"
-                                     styleClass="ui-button-success ui-button-flat" />
-                </p:column>
-
-
             </p:dataTable>
-
         </p:panel>
     </h:form>
 

@@ -1,3 +1,4 @@
+
 package br.edu.ifpr.bsi.projetopdm.bean;
 
 import br.edu.ifpr.bsi.projetopdm.dao.FrequenciaDAO;

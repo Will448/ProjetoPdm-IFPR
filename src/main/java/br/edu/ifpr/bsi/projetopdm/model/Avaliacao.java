@@ -1,11 +1,10 @@
 package br.edu.ifpr.bsi.projetopdm.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tb_avaliacao")
-
-
 public class Avaliacao {
 
     @Id
@@ -21,9 +20,12 @@ public class Avaliacao {
     private Monitoria monitoria;
 
     @Column
-    private String data;
+    private LocalDate data;
+
     @Column
-    private float nota;
+    private Double nota;
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -49,19 +51,20 @@ public class Avaliacao {
         this.monitoria = monitoria;
     }
 
-    public String getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
-
-    public float getNota() {
+    public Double getNota() {
         return nota;
     }
 
-    public void setNota(float nota) {
+    public void setNota(Double nota) {
         this.nota = nota;
     }
+
+
 }

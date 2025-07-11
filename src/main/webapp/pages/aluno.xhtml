@@ -1,1 +1,140 @@
-<!-- todas as funçoes do aluno vem aqui-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Área do Aluno</title>
+    <style>
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-right: 1rem;
+        }
+
+        .logout-button {
+            background-color: #007ad9;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .welcome-panel {
+            margin: 1rem;
+        }
+
+        .monitorias-panel {
+            margin: 1rem;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <!-- Menu superior -->
+    <h:form id="formMenu">
+        <p:megaMenu orientation="horizontal">
+            <p:menuitem value="Início"
+                        url="#{request.contextPath}/pages/aluno.xhtml"
+                        icon="pi pi-home" />
+            <p:menuitem value="Editar Perfil"
+                        url="#{request.contextPath}/pages/editar.xhtml"
+                        icon="pi pi-user-edit" />
+
+            <!-- ✅ Botão que abre a página de Minhas Inscrições -->
+            <p:menuitem value="Minhas Inscrições"
+                        url="#{request.contextPath}/pages/minhasInscricoes.xhtml"
+                        icon="pi pi-list" />
+
+
+            <f:facet name="end">
+                <div class="avatar-container">
+                    <p:avatar size="large" shape="circle">
+                        <p:graphicImage value="../img/ftAluno.png" />
+                    </p:avatar>
+                    <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
+                                     styleClass="logout-button ui-button-danger" />
+                </div>
+            </f:facet>
+        </p:megaMenu>
+    </h:form>
+
+    <!-- Mensagens -->
+    <p:growl id="mensagens" />
+
+    <!-- Formulário principal -->
+    <h:form id="formAluno">
+
+        <!-- Boas-vindas -->
+        <p:panel class="welcome-panel">
+            <h3>Olá, <strong>#{usuarioSistemaBean.usuarioLogado.nome}</strong>!</h3>
+            <p>Abaixo estão as monitorias disponíveis para inscrição:</p>
+        </p:panel>
+
+        <!-- Tabela de monitorias -->
+        <p:panel header="Monitorias Disponíveis" class="monitorias-panel">
+            <p:dataTable id="TbMonitorias"
+                         value="#{alunoBean.monitoriasDisponiveis}"
+                         var="m"
+                         rows="10"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         responsiveLayout="scroll"
+                         emptyMessage="Nenhuma monitoria disponível no momento.">
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{m.titulo}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{m.descricao}" />
+                </p:column>
+
+                <p:column headerText="Data/Hora">
+                    <h:outputText value="#{m.dataHora}" />
+                </p:column>
+
+                <p:column headerText="Local">
+                    <h:outputText value="#{m.local}" />
+                </p:column>
+
+                <p:column headerText="Ações" style="width:150px;">
+                    <p:commandButton value="Inscrever-se"
+                                     icon="pi pi-check"
+                                     action="#{alunoBean.inscreverEmMonitoria(m)}"
+                                     update=":formAluno:TbMonitorias :mensagens"
+                                     styleClass="ui-button-success ui-button-outlined" />
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+        <p:panel header="Eventos Disponíveis" style="margin:1rem;">
+            <p:dataTable value="#{eventoBean.eventos}" var="evento" rows="10" paginator="true"
+                         paginatorPosition="bottom" responsiveLayout="scroll"
+                         emptyMessage="Nenhum evento disponível no momento.">
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{evento.titulo}" />
+                </p:column>
+
+                <p:column headerText="Local">
+                    <h:outputText value="#{evento.local}" />
+                </p:column>
+
+                <p:column headerText="Data">
+                    <h:outputText value="#{evento.data}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{evento.descricao}" />
+                </p:column>
+
+
+
+            </p:dataTable>
+        </p:panel>
+
+    </h:form>
+
+</h:body>
+</html>

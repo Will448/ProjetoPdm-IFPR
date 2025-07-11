@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <f:event type="preRenderView" listener="#{inscricaoBean.atualizarMinhasInscricoes}" />
+    <h:head>
+        <title>Minhas Inscrições</title>
+    </h:head>
+    <h:body>
+
+        <h:form id="formMenu">
+            <p:megaMenu orientation="horizontal">
+                <p:menuitem value="Início"
+                            url="#{request.contextPath}/pages/aluno.xhtml"
+                            icon="pi pi-home" />
+
+            </p:megaMenu>
+        </h:form>
+        <h:form id="formMinhasInscricoes">
+            <h2>Minhas Inscrições</h2>
+            <p:dataTable id="TbMinhasInscricoes"
+                         value="#{inscricaoBean.minhasInscricoes}"
+                         var="inscricao"
+                         rows="10"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         emptyMessage="Você ainda não possui inscrições.">
+                <p:column headerText="Monitoria">
+                    <h:outputText value="#{inscricao.monitoria.titulo}" />
+                </p:column>
+                <p:column headerText="Ação">
+                    <p:commandButton value="Avaliar"
+                                     icon="pi pi-star"
+                                     actionListener="#{avaliacaoBean.prepararAvaliacao(inscricao)}"
+                                     update="dialogAvaliar"
+                                     process="@this"
+                                     oncomplete="PF('dialogAvaliar').show()"
+                                     styleClass="ui-button-primary" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <!-- Modal Dialog para Avaliação -->
+        <p:dialog id="dialogAvaliar"
+                  widgetVar="dialogAvaliar"
+                  header="Avaliar Monitoria"
+                  modal="true"
+                  resizable="false"
+                  width="500"
+                  height="300"
+                  showEffect="fade"
+                  hideEffect="fade">
+
+            <h:form id="formAvaliar">
+                <h:panelGrid columns="2" cellpadding="10" style="width: 100%;">
+                    <h:outputLabel value="Monitoria:" style="font-weight: bold;" />
+                    <h:outputText value="#{avaliacaoBean.avaliacao.monitoria.titulo}" />
+
+                    <h:outputLabel for="nota" value="Nota (0-10):" style="font-weight: bold;" />
+                    <p:inputText id="nota"
+                                 value="#{avaliacaoBean.avaliacao.nota}"
+                                 required="true"
+                                 requiredMessage="Nota obrigatória."
+                                 placeholder="0.0"
+                                 style="width: 100px;">
+                        <f:convertNumber type="number" maxFractionDigits="1" />
+                        <f:validateDoubleRange minimum="0" maximum="10"
+                                               validatorMessage="Nota deve estar entre 0 e 10" />
+                    </p:inputText>
+                </h:panelGrid>
+
+                <p:messages showDetail="true" closable="true" />
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <p:commandButton value="Salvar"
+                                     icon="pi pi-check"
+                                     action="#{avaliacaoBean.salvarAvaliacao}"
+                                     update="formMinhasInscricoes"
+                                     process="@form"
+                                     oncomplete="if (args.validationFailed) return; PF('dialogAvaliar').hide();"
+                                     styleClass="ui-button-success"
+                                     style="margin-right: 10px;" />
+
+                    <p:commandButton value="Cancelar"
+                                     icon="pi pi-times"
+                                     onclick="PF('dialogAvaliar').hide()"
+                                     type="button"
+                                     styleClass="ui-button-secondary" />
+                </div>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

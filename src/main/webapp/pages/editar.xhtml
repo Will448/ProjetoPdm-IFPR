@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Editar Perfil</title>
+    <style>
+        html, body {
+            margin: 0; padding: 0; height: 100%;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #2c6e5f, #4da48b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2.5em 3em;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 140%;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+            text-align: center;
+        }
+        h2 {
+            color: #2c6e5f;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        label {
+            color: #2c6e5f;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.3rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.5em 0.7em;
+            margin-bottom: 1.2rem;
+            border: 1.8px solid #a3c1b0;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #4da48b;
+            outline: none;
+        }
+        /* Ajusta painel grid para labels alinhadas à esquerda */
+        h\:panelGrid {
+            width: 100%;
+            text-align: left;
+        }
+        /* Mensagens JSF */
+        h:messages {
+            margin-top: 1rem;
+            color: #000;
+            font-weight: normal;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="container">
+        <h:form id="formPerfil">
+            <h2>Editar Perfil</h2>
+
+            <h:panelGrid columns="1" cellpadding="6">
+                <h:outputLabel for="login" value="Login:" />
+                <h:inputText id="login" value="#{loginBean.usuarioEditavel.login}" required="true" />
+
+                <h:outputLabel for="email" value="Email:" />
+                <h:inputText id="email" value="#{loginBean.usuarioEditavel.email}" required="true" />
+
+                <h:outputLabel for="senha" value="Senha:" />
+                <h:inputSecret id="senha" value="#{loginBean.usuarioEditavel.senha}" required="true" />
+            </h:panelGrid>
+
+            <p:commandButton value="Salvar Alterações"
+                             action="#{loginBean.atualizarPerfil}"
+                             icon="pi pi-save"
+                             update="formPerfil:msgs"
+                             process="@form"
+                             styleClass="ui-button-success"
+            />
+
+            <h:messages id="msgs" globalOnly="true" layout="block" />
+        </h:form>
+    </div>
+</h:body>
+</html>

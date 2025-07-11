@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Gerenciar Eventos</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e0e0e0;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <p:megaMenu orientation="horizontal">
+        <f:facet name="start">
+            <h:outputText value="Sistema de Eventos - IFPR Palmas"
+                          style="font-weight: bold; font-size: 18px; padding-left: 1rem;" />
+        </f:facet>
+    </p:megaMenu>
+
+    <h:form styleClass="form-container">
+
+        <p:growl id="mensagens" />
+
+        <p:panel header="Novo Evento">
+            <p:panelGrid columns="2" columnClasses="label,value" style="width:100%;">
+
+                <h:outputLabel value="Título:" />
+                <p:inputText value="#{eventoBean.evento.titulo}" required="true" />
+
+                <h:outputLabel value="Local:" />
+                <p:inputText value="#{eventoBean.evento.local}" required="true" />
+
+                <h:outputLabel value="Data:" />
+                <p:inputText value="#{eventoBean.evento.data}" placeholder="YYYY-MM-DD" required="true" />
+
+                <h:outputLabel value="Descrição:" />
+                <p:inputTextarea value="#{eventoBean.evento.descricao}" rows="4" required="true" />
+
+                <h:outputLabel value="Responsável:" />
+                <p:selectOneMenu value="#{eventoBean.evento.responsavel}" required="true" style="width:100%">
+                    <f:selectItem itemLabel="Selecione um responsável" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{eventoBean.usuarios}" var="u"
+                                   itemLabel="#{u.nome}" itemValue="#{u}" />
+                </p:selectOneMenu>
+
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:commandButton
+                    value="Salvar"
+                    action="#{eventoBean.salvarEvento}"
+                    icon="pi pi-save"
+                    ajax="false"
+                    styleClass="ui-button-success" />
+
+            <p:spacer width="10"/>
+
+            <p:commandButton
+                    value="Limpar"
+                    action="#{eventoBean.limparEvento}"
+                    icon="pi pi-times"
+                    styleClass="ui-button-secondary"
+                    ajax="false" />
+            <p:spacer width="10"/>
+            <p:commandButton
+                    value="Cancelar"
+                    action="coordenador.xhtml?faces-redirect=true"
+                    icon="pi pi-times"
+                    styleClass="ui-button-secondary"
+                    immediate="true"
+                    ajax="false" />
+        </p:panel>
+    </h:form>
+
+    <h:form styleClass="form-container">
+        <p:panel header="Eventos Cadastrados">
+            <p:dataTable value="#{eventoBean.eventos}" var="evento" responsiveLayout="scroll">
+
+                <p:column headerText="Título">
+                    #{evento.titulo}
+                </p:column>
+
+                <p:column headerText="Local">
+                    #{evento.local}
+                </p:column>
+
+                <p:column headerText="Data">
+                    #{evento.data}
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    #{evento.descricao}
+                </p:column>
+
+                <p:column headerText="Responsável">
+                    <h:outputText value="#{eventoBean.evento.responsavel}" />
+
+                </p:column>
+
+                <p:column headerText="Ações">
+                    <p:commandButton icon="pi pi-pencil"
+                                     title="Editar"
+                                     action="#{eventoBean.selecionarEvento(evento)}"
+                                     ajax="false"
+                                     styleClass="ui-button-warning" />
+                    <p:spacer width="5"/>
+                    <p:commandButton icon="pi pi-trash"
+                                     title="Remover"
+                                     action="#{eventoBean.removerEvento(evento)}"
+                                     ajax="false"
+                                     styleClass="ui-button-danger" />
+
+                </p:column>
+
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+
+    <div class="footer">
+        Sistema de Eventos IFPR Palmas - 2025
+    </div>
+
+</h:body>
+</html>

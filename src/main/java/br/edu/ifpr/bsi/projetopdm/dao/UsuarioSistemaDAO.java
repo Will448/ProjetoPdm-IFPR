@@ -29,4 +29,21 @@ public class UsuarioSistemaDAO extends GenericDAO<UsuarioSistema> {
 
         return usuario;
     }
+    public void atualizarUsuario(UsuarioSistema usuario) {
+        Session session = HibernateHelper.getFabricaDeSessoes().openSession();
+        try {
+            session.beginTransaction();
+            System.out.println("Atualizando usuário: " + usuario.getLogin());
+            session.merge(usuario);
+            session.getTransaction().commit();
+            System.out.println("Usuário atualizado com sucesso.");
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            System.out.println("Erro ao atualizar usuário: " + e.getMessage());
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
 }
